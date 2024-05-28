@@ -12,6 +12,17 @@ MODEL = "gpt-3.5-turbo-0125"
 TEMP = 0.7
 
 def get_response_openai(input_data):
+    """Generate a response using the OpenAI chat model.
+
+       This function uses the OpenAI chat model to generate a response based on the input data provided.
+
+       Args:
+           input_data (str): The input text data to be used for generating the response.
+
+       Returns:
+           dict: A dictionary containing structured data about a Pokémon based on the input text.
+               The structured data includes the name of the Pokémon, its main color, types, and abilities.
+       """
     completion = client.chat.completions.create(
         model=MODEL,
         messages=[
