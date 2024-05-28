@@ -9,7 +9,7 @@ my_api_key = os.getenv('API_KEY')
 client = OpenAI(api_key=my_api_key)
 
 MODEL = "gpt-3.5-turbo-0125"
-TEMP = 0.6
+TEMP = 0.7
 
 def get_response_openai(input_data):
     completion = client.chat.completions.create(
@@ -25,6 +25,41 @@ def get_response_openai(input_data):
                 "content": input_data
             }
         ],
+        functions=[
+            {
+                "name": "extract_pokemon_info",
+                "description": "Return structured data of pokemon",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "name_pokemon": {
+                            "type": "string",
+                            "description": "Name of pokemon"
+                        },
+                        "color": {
+                          "type": "string",
+                          "description": "Main color of pokemon",
+                        },
+                        "type": {
+                            "type": "array",
+                            "description": "Return type of pokemon e.g. [Green], [Fire, Green]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ability_name": {
+                            "type": "array",
+                            "description": "Return type of pokemon e.g. [Cut], [Jump, Hypnosis]",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                    },
+                "required": ["name_pokemon"]
+                }
+            }
+        ],
+        function_call="auto",
         temperature=TEMP,
         top_p=1
     )
