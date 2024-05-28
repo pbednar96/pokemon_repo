@@ -1,3 +1,5 @@
+import pokemon_openai
+
 import flask
 from flask import Flask, request, jsonify
 
@@ -13,7 +15,8 @@ def monitoring():
 @app.route('/structured', methods=["POST"])
 def structured_data():
     data = request.get_json()
-    return jsonify(data)
+    response = pokemon_openai.get_response_openai(data["text"])
+    return jsonify(response)
 
 
 if __name__ == '__main__':
