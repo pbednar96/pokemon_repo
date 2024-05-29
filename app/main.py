@@ -27,8 +27,22 @@ def structured_data():
     Returns:
         Structured JSON: A JSON response containing the generated structured response.
     """
-    data = request.get_json()
-    response = pokemon_openai.get_response_openai(data["text"])
+    try:
+        data = request.get_json()
+        if not data:
+            raise ValueError("No data!")
+        if "text" not in data:
+            raise ValueError("No key 'text' in data JSON")
+    except ValueError as e:
+        return jsonify({"error": "Invalid input", "details": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "Unexpected exception", "details": str(e)}), 400
+
+    try:
+        response = pokemon_openai.get_response_openai(data["text"])
+    except Exception as e:
+        return jsonify({"error": "Fail response from Pokémon OpenAI", "details": str(e)}), 500
+
     return jsonify(response)
 
 
