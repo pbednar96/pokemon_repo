@@ -7,6 +7,11 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
 
+class PokemonOpenAI:
+    def get_response_openai(self, text):
+        return {'pokemon_name': 'Pokemon'}
+
+
 @app.route('/monitoring', methods=['GET'])
 def monitoring():
     """Endpoint for monitoring the status of the service.
@@ -29,7 +34,7 @@ def structured_data():
     """
     try:
         data = request.get_json()
-        if not data:
+        if data is None or data == {}:
             raise ValueError("No data!")
         if "text" not in data:
             raise ValueError("No key 'text' in data JSON")
